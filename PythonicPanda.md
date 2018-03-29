@@ -18,11 +18,11 @@ ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=10
 ```
 
 This outputs the following image:
-[alt text][Figure_1]
+![alt text][Figure_1]
 
 
 
 
-[Figure_1]: C:\Users\Nicolas Filipovic\Documents\GitHub\PythonEmProgresso\figures\Figure_1 "Random number generated with pd.Series and a nice axis!"
+[Figure_1]: C:\Users\Nicolas Filipovic\Documents\GitHub\PythonEmProgresso\figures\Figure_1.png "Random number generated with pd.Series and a nice axis!"
 
 
