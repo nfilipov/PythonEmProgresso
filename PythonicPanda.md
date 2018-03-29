@@ -18,7 +18,5 @@ ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=10
 ```
 
 This outputs the following image:
-![Image](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_1.png?raw=true)
-
-Random number generated with pd.Series and a nice axis!
+![Image](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_1.png?raw=true)"Random number generated with pd.Series and a nice axis!"
 
