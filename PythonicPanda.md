@@ -18,5 +18,17 @@ ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=10
 ```
 
 This outputs the following image:
-![Image](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_1.png?raw=true)"Random number generated with pd.Series and a nice axis!"
 
+![Image](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_1.png?raw=true)
+
+Turning into a DataFrame was ok. Then I did the following:
+
+```python
+# didnt work because they don't tell you periods should equal the arg in random.randn!!
+ts = pd.DataFrame(np.random.randn(1000), index=pd.timedelta_range(0, periods=10, freq='H'))
+# periods = 1000 worked.
+```
+
+The output of periods=1000 shows that timedelta_range is for points that will be regularly spaced and that is not what I want in the end...
+
+![figure2](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_2.png?raw=true)
