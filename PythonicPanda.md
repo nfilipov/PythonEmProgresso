@@ -55,8 +55,50 @@ so instead of changing the DataFrame definition like removing the column index e
 
 ```python
 ts = pd.DataFrame(df.API_IMS.values, index=pd.date_range(0, periods=len(df.index), freq='ms'))
-ts.plot()
+ts.plot() 
 plt.show()
 ```
 
 ![figure3](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_3.png?raw=true)
+
+Now, I'd like to remind myself of the goal: plot this data as a function of the proper timestamp points at which it was produced. We're missing:
+- the timestamp data from index into time series
+- the corresponding coordinates (for the moment we have fake ones)
+- the proper axis marking-labeling (beauty is accessory one would say)
+
+Let's just try plotting a (x,y) scatter plot of (time,API_IMS). Based off the definition of my dataframe ```df```, we do:
+
+```python
+df.plot.scatter(x=df.index, y='QH_API')
+```
+
+... and that returns a ```KeyError: "Index([u'01:30:01:030', {....}  u'07:57:54:194'],\n      dtype='object', name=u'time', length=693) not in index"```
+
+From here I can either convert it to a dtype=Timestamp or numeric datetime64 object, or I can remove the index_col argument in the pandas DataFrame initial defintion. But I won't because indexes are the point of Pandas :)
+
+There are keyword arguments to make the ```pandas.read_csv()``` method better interpret and import the data. 
+https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html
+
+```python
+## read the data
+df = pd.read_csv(filepath_or_buffer=path_for_data+".csv",
+				 sep=";",
+				 memory_map = True, # removes the I/O overhead by accessing a memory-based object instead of the actual filepath object.
+				 infer_datetime_format=True,
+				 parse_dates=True,
+				 names=['event#','time','ISIN@MIC','Status','MIC','Timestamp','ExchQH','QH_API','API_IMS','IMS_TA'])
+```
+output:
+```
+sys:1: DtypeWarning: Columns (5,6,7,8,9) have mixed types. Specify dtype option on import or set low_memory=False.
+Traceback (most recent call last):
+  File "LatencyAnalysis.py", line 237, in <module>
+    main()
+  File "LatencyAnalysis.py", line 210, in main
+    BasicPlots(mic,date)
+  File "LatencyAnalysis.py", line 106, in BasicPlots
+    df.time.info()
+  File "C:\Users\Nicolas Filipovic\Anaconda2\lib\site-packages\pandas\core\generic.py", line 3614, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'Series' object has no attribute 'info'
+```
