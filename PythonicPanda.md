@@ -40,9 +40,23 @@ Now that I think of it, I find odd the tick labeling since I gave freq='H' so I'
 Let's try to incorporate our timeseries data and give a unit of milliseconds (disrespectful to the fact that our points should in turn not be regularly distributed over time).
 
 ```python
-print len(df.index)
+print len(df.index) ## that was 693, btw.
 ts = pd.DataFrame(df.API_IMS, index=pd.date_range(0, periods=len(df.index), freq='H'))
 ```
 
-this returns a ``` ValueError: cannot reindex from a duplicate axis```
+this returns a ``` ValueError: cannot reindex from a duplicate axis```. This is because my data was defined previously as:
 
+```python
+df = pd.read_csv(filepath_or_buffer=path_for_data+".csv",sep=";", index_col='time', infer_datetime_format=True) 
+df.columns=['event#','ISIN@MIC','Status','MIC','Timestamp','ExchQH','QH_API','API_IMS','IMS_TA']
+```
+
+so instead of changing the DataFrame definition like removing the column index etc., I pump np.arrays out of it and parse them to my time series.
+
+```python
+ts = pd.DataFrame(df.API_IMS.values, index=pd.date_range(0, periods=len(df.index), freq='ms'))
+ts.plot()
+plt.show()
+```
+
+![figure3](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_3.png?raw=true)
