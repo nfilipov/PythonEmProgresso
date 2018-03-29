@@ -18,7 +18,7 @@ ts = pd.Series(np.random.randn(1000), index=pd.date_range('1/1/2000', periods=10
 ```
 
 This outputs the following image:
-![alt text][Figure_1]
+[alt text][Figure_1]
 
 
 
