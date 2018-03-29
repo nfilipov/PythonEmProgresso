@@ -113,3 +113,62 @@ After studying this problem for a long time, here are my conclusions:
 
 - timestamp objects should be read properly if the milliseconds are separated with a **comma** and not a colon.
 - specify the dtypes when there's a header: it's recommended because if you do, pandas will becom more verbose and infer with more wisdom your data objects. 
+
+Note the change with the following:
+
+```python
+df = pd.read_csv(filepath_or_buffer=path_for_data+".csv",
+				 sep=";",
+				 memory_map = True, # removes the I/O overhead by accessing a memory-based object instead of the actual filepath object.
+				 infer_datetime_format=True,
+				 parse_dates=['time'],
+				 index_col = 'time',
+				 dtype={'event#': np.float64, 'ISIN@MIC': str, 'Status' : str, 'MIC': str, #'time': np.datetime64,
+						'Timestamp':np.int64,'ExchQH': np.float64,'QH_API': np.float64,'API_IMS': np.float64,'IMS_TA': np.float64}) #,
+df.info()
+```
+output:
+```
+DatetimeIndex: 6043 entries, 2018-03-29 06:45:59.413000 to 2018-03-29 14:24:51.296000
+Data columns (total 9 columns):
+Unnamed: 0    6043 non-null int64
+ISIN@MIC      6043 non-null object
+Status        6043 non-null object
+MIC           6043 non-null object
+Timestamp     6043 non-null int64
+Exch_QH       6043 non-null int64
+QH_API        6043 non-null float64
+API_IMS       6043 non-null float64
+IMS_TA        6043 non-null float64
+dtypes: float64(3), int64(3), object(3)
+```
+
+which is exactly what I wanted
+
+## Shit getting real: we plot hard
+
+Let's try to plot 1D figures for the four timedeltas: Exch_QH, QH_API, API_IMS, IMS_TA.
+Oddly picking stuff here and there I tried the following:
+
+###### the style wasn't great, so I changed one setting after another to do this. here's what I settle with for today:
+
+```python
+fig, ax = plt.subplots(4, sharex=True)
+df.Exch_QH.resample('30S').mean().plot(ax=ax[0], style='-o', alpha=0.3)
+df.QH_API.resample('30S').mean().plot(ax=ax[1], style='-o', alpha=0.3) #.plot(style='-o')
+df.API_IMS.resample('30S').mean().plot(ax=ax[2], style='-o', alpha=0.3) #.plot(style='-o')
+df.IMS_TA.resample('30S').mean().plot(ax=ax[3], style='-o', alpha=0.3) #.plot(style='-o')
+plt.show()
+```
+
+output:
+
+
+![figure4](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_4.png?raw=true)
+
+
+## Final output : file:///Z:/Nicolas/Performances/index_20180327.html
+
+Good job, bro :) 
+
+
