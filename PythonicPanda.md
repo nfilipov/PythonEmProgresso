@@ -87,18 +87,29 @@ df = pd.read_csv(filepath_or_buffer=path_for_data+".csv",
 				 infer_datetime_format=True,
 				 parse_dates=True,
 				 names=['event#','time','ISIN@MIC','Status','MIC','Timestamp','ExchQH','QH_API','API_IMS','IMS_TA'])
+df.info()
 ```
 output:
 ```
 sys:1: DtypeWarning: Columns (5,6,7,8,9) have mixed types. Specify dtype option on import or set low_memory=False.
-Traceback (most recent call last):
-  File "LatencyAnalysis.py", line 237, in <module>
-    main()
-  File "LatencyAnalysis.py", line 210, in main
-    BasicPlots(mic,date)
-  File "LatencyAnalysis.py", line 106, in BasicPlots
-    df.time.info()
-  File "C:\Users\Nicolas Filipovic\Anaconda2\lib\site-packages\pandas\core\generic.py", line 3614, in __getattr__
-    return object.__getattribute__(self, name)
-AttributeError: 'Series' object has no attribute 'info'
+RangeIndex: 454521 entries, 0 to 454520
+Data columns (total 10 columns):
+event#       454520 non-null float64
+time         454521 non-null object
+ISIN@MIC     454521 non-null object
+Status       454521 non-null object
+MIC          454521 non-null object
+Timestamp    454521 non-null object
+ExchQH       454521 non-null object
+QH_API       454521 non-null object
+API_IMS      454521 non-null object
+IMS_TA       454521 non-null object
+dtypes: float64(1), object(9)
+memory usage: 34.7+ MB
 ```
+
+Sometimes, the solution is simple. Python may be full of methods and libs that make you want to try crazy code, but in the end trying things in an interpreter is the only way to reach conclusions quickly (not like I did this time).
+After studying this problem for a long time, here are my conclusions:
+
+- timestamp objects should be read properly if the milliseconds are separated with a **comma** and not a colon.
+- specify the dtypes when there's a header: it's recommended because if you do, pandas will becom more verbose and infer with more wisdom your data objects. 
