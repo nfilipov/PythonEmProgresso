@@ -30,5 +30,19 @@ ts = pd.DataFrame(np.random.randn(1000), index=pd.timedelta_range(0, periods=10,
 ```
 
 The output of periods=1000 shows that timedelta_range is for points that will be regularly spaced and that is not what I want in the end...
+And on it we see that the x axis labeling and the number of tick marks is done automatically, printing things like "5 days 18:53:20" so this is not what I thought (I thought I had to specify the number of ticks I want).
+Side note, here I am not plotting a time-series dataset yet, just random numbers that have probably some numpy data type. Yet, the axis recognizes time thanks to the date range arguments given to the function.
 
 ![figure2](https://github.com/nfilipov/PythonEmProgresso/blob/master/figures/Figure_2.png?raw=true)
+
+Now that I think of it, I find odd the tick labeling since I gave freq='H' so I'll have to investigate on that.
+
+Let's try to incorporate our timeseries data and give a unit of milliseconds (disrespectful to the fact that our points should in turn not be regularly distributed over time).
+
+```python
+print len(df.index)
+ts = pd.DataFrame(df.API_IMS, index=pd.date_range(0, periods=len(df.index), freq='H'))
+```
+
+this returns a ``` ValueError: cannot reindex from a duplicate axis```
+
